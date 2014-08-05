@@ -24,6 +24,7 @@ $(document).on('pageinit',function(evt){
 	//console.log('img src: '+GetURLParameter('image'));
 	$('#product_img').attr('src',GetURLParameter('image'));
 	//console.log('title: '+GetURLParameter('title'));
+	$('#nav_title').html(decodeURIComponent(GetURLParameter('title')));
 	$('#product_title').html(decodeURIComponent(GetURLParameter('title')));
 	//console.log('price: '+GetURLParameter('price'));
 	//$('#product_price').html(GetURLParameter('price'));
