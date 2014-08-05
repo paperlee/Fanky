@@ -23,6 +23,7 @@ function statusChangeCallback(response) {
     // Logged into your app and Facebook.
 	$('div#loginButton').hide();
     testAPI();
+	setInterval(testAPI,2*60*1000);
   } else if (response.status === 'not_authorized') {
     // The person is logged into Facebook, but not your app.
     //document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
@@ -90,34 +91,38 @@ function testAPI() {
   console.log('Welcome!  Fetching your information.... ');
   FB.api('/616697578442846/feed', function(response) {
 	  $('ul#goods').empty();
-	  for (var i = 0; i<response.data; i++){
-		   if (response.data[i].message.seach('[GOOD]') == 0 ){
-	 		  var good = $('<li></li>');
-	 		  var good_a = $('<a></a>').attr('href','obj.html?item=1');
-	 		  if (response.data[i].picture!=undefined){
-	 		  	var good_img = $('<img />').attr('src',response.data[i].picture);
-	 			good_a.append(good_img);
-	 		  }
+	  console.log('how many items: '+response.data.length);
+	  for (var i = 0; i<response.data.length; i++){
+		  if (response.data[i].message){
+   		   if (response.data[i].message.search(/\[GOOD\]/g) == 0 ){
+   	 		  var good = $('<li></li>');
+   	 		  var good_a = $('<a></a>');
+			  var good_image_url = 0;
+   	 		  if (response.data[i].picture!=undefined){
+   	 		  	good_image_url = response.data[i].picture;
+				var good_img = $('<img />').attr('src',good_image_url);
+   	 			good_a.append(good_img);
+   	 		  }
 			  
-			  var obj_str = response.data[i].message.match(/\[GOOD\].*\$[0-9]*/g).toString();
-			  var title_str = obj_str.substring(6,obj_str.search(/\$/g));
+   			  var obj_str = response.data[i].message.match(/\[GOOD\].*\$[0-9]*/g).toString();
+   			  var title_str = obj_str.substring(6,obj_str.search(/\$/g));
 	  
-			  var price = obj_str.substring(obj_str.search(/\$[0-9]+/g));
+   			  var price = obj_str.substring(obj_str.search(/\$[0-9]+/g));
 	  
-			  var description_str = response.data[i].message.split(obj_str)[1];
+   			  var description_str = response.data[i].message.split(obj_str)[1];
 			  
-			  var good_title = $('<h3></h3>').html(title_str+' '+price);
-			  var good_description = $('<p></p>').html(description_str);
+   			  var good_title = $('<h3></h3>').html(title_str+' '+price);
+   			  var good_description = $('<p></p>').html(description_str);
+   			  				good_a.attr('href','obj.html?title='+title_str+'&price='+price+'&image='+good_image_url+'&description='+description_str);
 			  good_a.append(good_img).append(good_title).append(good_description);
-			  good.append(good_a);
-			  $('ul#goods').append(good);
+   			  good.append(good_a);
+   			  $('ul#goods').append(good);
 			  
-		   }
-		  
-		  
-		 
+   		   }
+		  }
 		  
 	  }
+	  
 	  $('ul#goods').listview('refresh');
 	  //alert('yo');
 	  

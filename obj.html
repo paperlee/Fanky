@@ -5,21 +5,53 @@
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+<script>
+function GetURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+
+$(document).on('pageinit',function(evt){
+	//console.log('img src: '+GetURLParameter('image'));
+	$('#product_img').attr('src',GetURLParameter('image'));
+	//console.log('title: '+GetURLParameter('title'));
+	$('#product_title').html(decodeURIComponent(GetURLParameter('title')));
+	//console.log('price: '+GetURLParameter('price'));
+	//$('#product_price').html(GetURLParameter('price'));
+	$('#btn_buy').html($('#btn_buy').html()+' '+GetURLParameter('price'));
+	//console.log('des: '+GetURLParameter('description'));
+	$('#product_description').html(decodeURIComponent(GetURLParameter('description')));
+});
+</script>
 </head>
 <body>
 
 <div data-role="page" id="pageone" data-add-back-btn="true">
   <div data-role="header">
 	  <a href="#" data-icon="arrow-l" data-rel="back">Back</a>
-    <h1>Insert Page Title Here</h1>
+    <h1 id="nav_title">Insert Page Title Here</h1>
   </div>
 
-  <div data-role="main" class="ui-content">
-    <h3>THIS IS OBJECT VIEW</h3>
+  <div data-role="main" class="ui-content" style="padding:0;">
+    <img id="product_img" style="width:100%;" />
+	<h3 id="product_title" style="padding-left:1em; padding-right:1em;"></h3>
+	<h5 id="product_price" style="padding-left:1em; padding-right:1em;"></h5>
+	<p id="product_description" style="padding-left:1em; padding-right:1em;"></p>
+	<a href="#" data-role="button" data-inline="true" data-theme="b" id="btn_buy">Buy</a>
+	<a href="#" data-role="button" data-inline="true" id="btn_cart">Cart</a>
   </div>
 
   <div data-role="footer">
-    <h1>Insert Footer Text Here</h1>
+    <h1>Fanky | All rights reserved 2014</h1>
   </div>
 </div> 
 
